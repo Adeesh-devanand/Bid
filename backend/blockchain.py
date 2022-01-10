@@ -1,6 +1,4 @@
 # import the libraries required for cryptography
-import crypt
-import cryptography
 import hashlib
 
 # importing date for measuring the time when the block was added to the Blockchain.
@@ -8,19 +6,25 @@ import datetime
 
 # Note: everything will be serialized to string!
 
+# Lets define a Transaction
+class Transaction:
+    def __init__(self, senderAdderess, recAddress, amount):
+        self.time = datetime.datetime.now()
+        self.senderAddress = senderAdderess
+        self.recAddress = recAddress
+        self.amount = amount
 
 # this is the class that defines a particular block of the blockchain
 class Block:
-    def __init__(self,index, transaction,prevHash=""):
-        self.index = index
+    def __init__(self, transactions,prevHash=""):
         self.prevHash = prevHash
-        self.transaction = transaction
+        self.transactions = transactions
         self.nonce = 0
         self.blockHash = self.calculateHash()
         self.time = datetime.datetime.now()
        
     def calculateHash(self):
-        return hashlib.sha256(str(str(self.index) + self.prevHash + str(self.transaction)+ str(self.nonce)).encode()).hexdigest()
+        return hashlib.sha256(str( self.prevHash + str(self.transactions)+ str(self.nonce)).encode()).hexdigest()
     
 
     #mining the block, else any spammer can create multiple blocks without validation!!
@@ -30,31 +34,35 @@ class Block:
             self.nonce +=1
             self.blockHash = self.calculateHash()
 
-
 # this is the class that defines the blockchain
 class BlockChain:
     
     def __init__(self):
+
         # only property of the blockchain is the chain
         self.chain = [self.createGenesis()]
+        self.peningTransactions = []
+        self.miningReward = 100
+
     
-    
+
     # the first block of the blockchain should be added mannualy
     def createGenesis(self):
-        return Block(0, "Genesis")
+        return Block([Transaction("Genesis", "Genesis",10000)], "Genesis")
+
 
     # function to get the latest block
     def getLatestBlock(self):
         return self.chain[-1]  
 
-#  function to add blocks to the blockchain
-    def addBlock(self, newBlock):
-        newBlock.prevHash = self.getLatestBlock().blockHash
+    # Mining pending transactions and add the block!
+    def minePendingTransactions(self, reciverAddress):
+        newBlock = Block( self.peningTransactions, self.getLatestBlock().blockHash)
         newBlock.mineBlock()
         self.chain.append(newBlock)
-
+        self.peningTransactions = [Transaction(None,reciverAddress,self.miningReward)]
+    
     # verifying the blockchain
-
     def isValid(self):
         for i in range(1,len(self.chain)):
             currentBlock = self.chain[i]
@@ -67,20 +75,34 @@ class BlockChain:
                 return False, "chain issue"
 
         return True
+    
+    def createTransaction(self,transaction):
+        self.peningTransactions.append(transaction)
+
+    # get the current balance of an account
+    def getBalanceof(self, address):
+        balance = 0
+        for block in self.chain:
+            for transaction in block.transactions:
+                if(transaction.senderAddress == address):
+                    balance -= transaction.amount
+                if(transaction.recAddress == address):
+                    balance += transaction.amount
+        return balance
+            
+
+
 
 
 # Define DinkuCoin
 DinkuCoin = BlockChain()
 
-# transaction 1
-print("Mining block 1")
-DinkuCoin.addBlock(Block(1,{"amount": 100}))
-print(DinkuCoin.chain[1].blockHash)
+DinkuCoin.createTransaction(Transaction("Genesis","Chandan",5000))
+DinkuCoin.createTransaction(Transaction("Chandan","Adeesh",1000))
+DinkuCoin.minePendingTransactions("Preetham")
+print(DinkuCoin.getBalanceof("Chandan"))
+print(DinkuCoin.getBalanceof("Preetham"))
+print(DinkuCoin.getBalanceof("Adeesh"))
+DinkuCoin.minePendingTransactions("Preetham")
+print(DinkuCoin.getBalanceof("Preetham"))
 
-# transaction 2
-print("Mingng Block 2")
-DinkuCoin.addBlock(Block(2,{"amount": 100}))
-print(DinkuCoin.chain[2].blockHash)
-
-# Check if Dinkucoin is valid
-print("Is Dinku Coin valid?",DinkuCoin.isValid())
