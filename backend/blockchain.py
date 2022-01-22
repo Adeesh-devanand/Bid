@@ -34,6 +34,9 @@ class Block:
             self.nonce +=1
             self.blockHash = self.calculateHash()
 
+        #adeesh+nonce => adjfnkldjfmal;dsjfads ==> 0000kdsfnkadnfklsn
+
+
 # this is the class that defines the blockchain
 class BlockChain:
     
@@ -77,8 +80,13 @@ class BlockChain:
         return True
     
     def createTransaction(self,transaction):
-        self.peningTransactions.append(transaction)
-
+        senderAddress = transaction.senderAddress
+        receiverAddress = transaction.recAddress
+        if (senderAddress!="Genesis"):
+            if(self.getBalanceof(senderAddress)>= transaction.amount):
+                self.peningTransactions.append(transaction)
+            else:
+                print("you don't have enough money to transfer!!")
     # get the current balance of an account
     def getBalanceof(self, address):
         balance = 0
@@ -96,13 +104,11 @@ class BlockChain:
 
 # Define DinkuCoin
 DinkuCoin = BlockChain()
-
-DinkuCoin.createTransaction(Transaction("Genesis","Chandan",5000))
-DinkuCoin.createTransaction(Transaction("Chandan","Adeesh",1000))
-DinkuCoin.minePendingTransactions("Preetham")
-print(DinkuCoin.getBalanceof("Chandan"))
-print(DinkuCoin.getBalanceof("Preetham"))
-print(DinkuCoin.getBalanceof("Adeesh"))
-DinkuCoin.minePendingTransactions("Preetham")
-print(DinkuCoin.getBalanceof("Preetham"))
-
+DinkuCoin.createTransaction(Transaction("Genesis","adeesh",1000))
+DinkuCoin.minePendingTransactions("chandan")
+print(DinkuCoin.getBalanceof('adeesh'))
+print(DinkuCoin.getBalanceof('chandan'))
+DinkuCoin.minePendingTransactions("adeesh")
+print(DinkuCoin.getBalanceof('chandan'))
+print(DinkuCoin.isValid())
+DinkuCoin.createTransaction(Transaction("chandan",'adeesh',100000))
