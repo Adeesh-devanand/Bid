@@ -2,6 +2,8 @@
 from cryptography.hazmat.primitives import serialization as crypto_serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
 
 key = rsa.generate_private_key(
     backend=crypto_default_backend(),
@@ -19,4 +21,12 @@ public_key = key.public_key().public_bytes(
     crypto_serialization.Encoding.OpenSSH,
     crypto_serialization.PublicFormat.OpenSSH
 )
-key.sign("hello I am chandan",padding= public_key, algorithm="md5")
+signature = key.sign(
+    "Hi I am chandan",
+    padding.PSS(
+        mgf=padding.MGF1(hashes.SHA256()),
+        salt_length=padding.PSS.MAX_LENGTH
+    ),
+    hashes.SHA256()
+)
+print(signature)

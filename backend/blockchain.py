@@ -7,6 +7,7 @@ import datetime
 # Note: everything will be serialized to string!
 
 # Lets define a Transaction
+
 class Transaction:
     def __init__(self, senderAdderess, recAddress, amount):
         self.time = datetime.datetime.now()
@@ -46,12 +47,12 @@ class BlockChain:
         self.chain = [self.createGenesis()]
         self.peningTransactions = []
         self.miningReward = 100
-
+      
     
 
     # the first block of the blockchain should be added mannualy
     def createGenesis(self):
-        return Block([Transaction("Genesis", "Genesis",10000)], "Genesis")
+        return Block([Transaction("Genesis", "Genesis",21000000000)], "Genesis")
 
 
     # function to get the latest block
@@ -63,7 +64,7 @@ class BlockChain:
         newBlock = Block( self.peningTransactions, self.getLatestBlock().blockHash)
         newBlock.mineBlock()
         self.chain.append(newBlock)
-        self.peningTransactions = [Transaction(None,reciverAddress,self.miningReward)]
+        self.peningTransactions = [Transaction("Genesis",reciverAddress,self.miningReward)]
     
     # verifying the blockchain
     def isValid(self):
@@ -80,13 +81,8 @@ class BlockChain:
         return True
     
     def createTransaction(self,transaction):
-        senderAddress = transaction.senderAddress
-        receiverAddress = transaction.recAddress
-        if (senderAddress!="Genesis"):
-            if(self.getBalanceof(senderAddress)>= transaction.amount):
-                self.peningTransactions.append(transaction)
-            else:
-                print("you don't have enough money to transfer!!")
+        self.peningTransactions.append(transaction)
+
     # get the current balance of an account
     def getBalanceof(self, address):
         balance = 0
@@ -104,11 +100,11 @@ class BlockChain:
 
 # Define DinkuCoin
 DinkuCoin = BlockChain()
-DinkuCoin.createTransaction(Transaction("Genesis","adeesh",1000))
-DinkuCoin.minePendingTransactions("chandan")
-print(DinkuCoin.getBalanceof('adeesh'))
-print(DinkuCoin.getBalanceof('chandan'))
+DinkuCoin.createTransaction(Transaction("Genesis", "chandan", 100000))
 DinkuCoin.minePendingTransactions("adeesh")
-print(DinkuCoin.getBalanceof('chandan'))
-print(DinkuCoin.isValid())
-DinkuCoin.createTransaction(Transaction("chandan",'adeesh',100000))
+print(DinkuCoin.getBalanceof("chandan"))
+DinkuCoin.createTransaction(Transaction("chandan", "adeesh", 1))
+DinkuCoin.minePendingTransactions("adeesh")
+print(DinkuCoin.getBalanceof("adeesh"))
+DinkuCoin.createTransaction(Transaction("chandan", "harshita", 99))
+
