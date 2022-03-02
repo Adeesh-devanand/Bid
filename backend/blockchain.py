@@ -99,12 +99,12 @@ class BlockChain:
 
 
 # Define DinkuCoin
-DinkuCoin = BlockChain()
-DinkuCoin.createTransaction(Transaction("Genesis", "chandan", 100000))
-DinkuCoin.minePendingTransactions("adeesh")
-print(DinkuCoin.getBalanceof("chandan"))
-DinkuCoin.createTransaction(Transaction("chandan", "adeesh", 1))
-DinkuCoin.minePendingTransactions("adeesh")
-print(DinkuCoin.getBalanceof("adeesh"))
+TaaCoin = BlockChain()
+TaaCoin.createTransaction(Transaction("Genesis", "chandan", 100000))
+TaaCoin.minePendingTransactions("adeesh")
+print(TaaCoin.getBalanceof("chandan"))
+TaaCoin.createTransaction(Transaction("chandan", "adeesh", 1))
+TaaCoin.minePendingTransactions("adeesh")
+print(TaaCoin.getBalanceof("adeesh"))
 DinkuCoin.createTransaction(Transaction("chandan", "harshita", 99))
 
