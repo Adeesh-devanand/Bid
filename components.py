@@ -24,7 +24,7 @@ def mineTransactions(user,updateComponent):
     root= tk.Tk()
     root.geometry("500x500")
     tk.Label(root,text="We love you for maintaining the network!!").pack()
-    if(len(TaaCoin.peningTransactions)<=3):
+    if(len(TaaCoin.peningTransactions)<3):
         tk.Label(root, text= "please wait till pending transanction count reaches to 3+").pack()
         tk.Label(root, text="current pending transanctions: "+ str(len(TaaCoin.peningTransactions))).pack()
     else:
