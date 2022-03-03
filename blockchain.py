@@ -81,7 +81,11 @@ class BlockChain:
         return True
     
     def createTransaction(self,transaction):
+        if(transaction.amount>self.getBalanceof(transaction.senderAddress)):
+            print("you a broke piece of shit")
+            return False
         self.peningTransactions.append(transaction)
+        return True
 
     # get the current balance of an account
     def getBalanceof(self, address):
@@ -94,9 +98,16 @@ class BlockChain:
                     balance += transaction.amount
         return balance
             
-
-
-
-
-# Define DinkuCoin
-
+    def getUserTransactionHistory(self,user):
+        a=[]
+        for blocks in self.chain:
+            for transaction in blocks.transactions:
+                if (transaction.senderAddress == user or transaction.recAddress == user):
+                    a.append(transaction)
+                
+        return a
+    def checkIfUserHasPendingTransanctions(self,user):
+        for transanction in self.peningTransactions:
+            if(transanction.senderAddress== user):
+                return True
+        return False

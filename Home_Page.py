@@ -38,7 +38,7 @@ def Home_page(user):
     balance = tk.Label(frame1, text=("Balance:"+str(user.balance)), bg = "#AEB6BF", font =("Courier", 11))
     balance.place(relx = 0, rely = 0.6, relheight= 0.1)
 
-    refresh = tk.Button(frame1, text = "Refresh", bg="#D6DBDF", font =("Courier", 8))
+    refresh = tk.Button(frame1, text = "Refresh", bg="#D6DBDF", font =("Courier", 8), command= lambda: print(TaaCoin.getUserTransactionHistory(user.id)))
     refresh.place(relx = 0.075, rely = 0.9, relheight= 0.05, relwidth = 0.4)
 
 
@@ -67,6 +67,6 @@ def Home_page(user):
 
     transaction_history = tk.Label(frame3, bg= "#D6DBDF", font =("Courier", 11), text="Transaction History")
     transaction_history.place(relx = 0.3, rely = 0.1, relheight= 0.15, relwidth = 0.4)
-
-
+    show_transactions = tk.Label(frame3, text=str(TaaCoin.getUserTransactionHistory(user.id)))
+    
     root.mainloop()

@@ -9,13 +9,17 @@ def makeTransactionPage(user):
     root.geometry("500x500")
     tk.Label(root,text="add transaction pop up").pack()
     tk.Label(root,text=("sender address: "+ user.id)).pack()
-    inp= tk.Entry(root, width=50, borderwidth=3)
-    inp.pack()
-    amount = tk.Entry(root,width=50, borderwidth=3)
-    amount.pack()
-    tk.Button(root,text="make transaction",command= lambda: TaaCoin.createTransaction(Transaction(user.id,inp.get(),int(amount.get())))).pack()
+    if(TaaCoin.checkIfUserHasPendingTransanctions(user.id)):
+        tk.Label(root,text="please wait untill your pending transanctions are processed").pack() 
+    else:
+        inp= tk.Entry(root, width=50, borderwidth=3)
+        inp.pack()
+        amount = tk.Entry(root,width=50, borderwidth=3)
+        amount.pack()
+        button =tk.Button(root,text="make transaction",command= lambda: TaaCoin.createTransaction(Transaction(user.id,inp.get(),int(amount.get()))))
+        button.pack()
     root.mainloop()
-    
+
 def mineTransactions(user,updateComponent):
     root= tk.Tk()
     root.geometry("500x500")
