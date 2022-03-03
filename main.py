@@ -1,7 +1,6 @@
 
 import tkinter as tk
 from PIL import Image, ImageTk
-from Home_Page import Home_page
 
 from UtilityClasses import TaaCoin, User
 from blockchain import Transaction
@@ -25,13 +24,14 @@ def create_frame(fType):
 # Login frame
 def initialize_login():
     def create_home():
-        username, password = username_entryL.get(), password_entryL.get()
-        user= User(username)
-        initialize_home(user)
-        login_frame.place_forget()
-        create_frame("H-frame-1")
-        create_frame("H-frame-2")
-        create_frame("H-frame-3")
+         username, password = username_entryL.get(), password_entryL.get()
+         user= User(username)
+         initialize_home(user)
+         login_frame.place_forget()
+         create_frame("H-frame-1")
+         create_frame("H-frame-2")
+         create_frame("H-frame-3")
+
         
     login_frame = tk.Frame(root)
     frames["login"] = login_frame
@@ -52,7 +52,8 @@ def initialize_login():
     signUp.place(relx = 0.7, rely = 0.85, relheight= 0.03, relwidth = 0.2)
 
     Login = tk.Button(login_frame, text = "Login", bg="#315a6e", font =("Courier", 8), command=create_home)
-    Login.place(relx = 0.4, rely = 0.85, relheight= 0.075, relwidth = 0.15) 
+    Login.place(relx = 0.4, rely = 0.85, relheight= 0.075, relwidth = 0.15)
+
 # Signup frame
 def initialize_signup():
 
@@ -108,8 +109,6 @@ def initialize_home(user):
       frame3_borderH.place_forget()
       create_frame("login")
    
-   def refresh():
-      print(TaaCoin.getUserTransactionHistory(user.id))
 
    frame1_borderH = tk.Frame(root, bg="#315a6e")
    frames["H-frame-1"] = frame1_borderH
@@ -125,29 +124,25 @@ def initialize_home(user):
    username.config(font =("Courier", 11))
    username.place(relx = 0, rely = 0.4, relheight= 0.1)
 
-   unique_ID = tk.Label(frame1H, text="  Unique ID:", bg = "#AEB6BF", font =("Courier", 11))
-   unique_ID.place(relx = 0, rely = 0.5, relheight= 0.1, relwidth = 0.4)
+   # unique_ID = tk.Label(frame1H, text="  Unique ID:", bg = "#AEB6BF", font =("Courier", 11))
+   # unique_ID.place(relx = 0, rely = 0.5, relheight= 0.1, relwidth = 0.4)
 
    balance = tk.Label(frame1H, text=("Balance:"+str(user.balance)), bg = "#AEB6BF", font =("Courier", 11))
-   balance.place(relx = 0, rely = 0.6, relheight= 0.1)
-
-   refreshB = tk.Button(frame1H, text = "Refresh", bg="#D6DBDF", font =("Courier", 8), command=refresh)
-   refreshB.place(relx = 0.075, rely = 0.9, relheight= 0.05, relwidth = 0.4)
-
+   balance.place(relx = 0.03, rely = 0.6, relheight= 0.1)
 
    logoutB = tk.Button(frame1H, text = "Log out", bg= "#D6DBDF", font =("Courier", 8), command=logout)
-   logoutB.place(relx = 0.55, rely = 0.9, relheight= 0.05, relwidth = 0.4)
+   logoutB.place(relx = 0.3, rely = 0.9, relheight= 0.05, relwidth = 0.4)
 
    # frame 2
    def make_transaction():
-      makeTransactionPage(user)
+      makeTransactionPage(root, user)
 
    def mine_transactions():
-      mineTransactions(user,balance)
+      mineTransactions(root, user, balance)
 
    frame2_borderH = tk.Frame(root, bg="#315a6e")
    frames["H-frame-2"] = frame2_borderH
-   framesDim["H-frame-2"] = (0.55, 0.1, 0.35, 0.35)
+   framesDim["H-frame-2"] = (0.1, 0.75, 0.2, 0.39)
 
    frame2 = tk.Frame(frame2_borderH, bg = "#AEB6BF")
    frame2.place(relheight=0.9, relwidth=0.9, relx=0.05, rely=0.05)
@@ -159,15 +154,33 @@ def initialize_home(user):
    mine_transactionsB.place(relx = 0.1, rely = 0.55, relheight= 0.4, relwidth = 0.8)
 
    # frame 3
+   def refresh():
+      transactions = TaaCoin.getUserTransactionHistory(user.id)
+
+      history = ""
+      for transaction in transactions:
+         history += transaction.senderAddress + " " + transaction.recAddress + " " + str(transaction.amount) + "\n"
+      
+      transaction_history.config(text=history)
+
+
    frame3_borderH = tk.Frame(root, bg="#315a6e")
    frames["H-frame-3"] = frame3_borderH
-   framesDim["H-frame-3"] = (0.1, 0.75, 0.2, 0.8)
+   framesDim["H-frame-3"] = (0.55, 0.1, 0.78, 0.39)
 
    frame3 = tk.Frame(frame3_borderH, bg = "#AEB6BF")
-   frame3.place(relheight=0.8, relwidth=0.95, relx=0.025, rely=0.1)
+   frame3.place(relheight=0.9, relwidth=0.9, relx=0.05, rely=0.05)
 
-   transaction_history = tk.Label(frame3, bg= "#D6DBDF", font =("Courier", 11), text="Transaction History")
-   transaction_history.place(relx = 0.3, rely = 0.1, relheight= 0.15, relwidth = 0.4)
+   title = tk.Label(frame3, bg= "#AEB6BF", font =("Courier", 11), text="Transaction History")
+   title.place(relx = 0.15, rely = 0.1, relheight= 0.15, relwidth = 0.7)
+
+   transaction_history = tk.Label(frame3, bg= "#AEB6BF", font =("Courier", 10), text="")
+   transaction_history.place(relx = 0.15, rely = 0.35, relwidth = 0.7)
+
+
+   refreshB = tk.Button(frame3, text = "Refresh", bg="#D6DBDF", font =("Courier", 8), command=refresh)
+   refreshB.place(relx = 0.35, rely = 0.9, relheight= 0.05, relwidth = 0.3)
+
 
 def main():
     TaaCoin.createTransaction(Transaction("Genesis","chandan",1000))
