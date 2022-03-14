@@ -1,7 +1,7 @@
 
 import tkinter as tk
 from PIL import Image, ImageTk
-
+from Database import CreateUser, checkIfUserExists, login
 from UtilityClasses import TaaCoin, User
 from blockchain import Transaction
 from components import makeTransactionPage, mineTransactions
@@ -25,12 +25,24 @@ def create_frame(fType):
 def initialize_login():
     def create_home():
          username, password = username_entryL.get(), password_entryL.get()
-         user= User(username)
-         initialize_home(user)
-         login_frame.place_forget()
-         create_frame("H-frame-1")
-         create_frame("H-frame-2")
-         create_frame("H-frame-3")
+         if(checkIfUserExists(username)):
+            if(login(username,password)):
+               user= User(username)
+               initialize_home(user)
+               login_frame.place_forget()
+               create_frame("H-frame-1")
+               create_frame("H-frame-2")
+               create_frame("H-frame-3")
+         else:
+            print("creating new user")
+            CreateUser(username,password)
+            if(login(username,password)):
+               user= User(username)
+               initialize_home(user)
+               login_frame.place_forget()
+               create_frame("H-frame-1")
+               create_frame("H-frame-2")
+               create_frame("H-frame-3")
 
         
     login_frame = tk.Frame(root)
