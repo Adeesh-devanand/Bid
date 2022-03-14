@@ -34,21 +34,7 @@ def create_frame(fType):
 
 # Login frame
 def initialize_login():
-    def emptyIfPlace1(ent,place):
-         if ent.get()=="":
-            ent.insert(0,place)
-            return
-         else:
-            ent.delete("0","end")
-   
-    def emptyIfPlace2(ent,place):
-         if ent.get()=="":
-            ent.insert(0,place)
-            return
-         else:
-            ent.delete("0","end")
-   
-    
+
     def create_home():
          username, password = username_entryL.get(), password_entryL.get()
          if(checkIfUserExists(username, mc)):
@@ -77,8 +63,11 @@ def initialize_login():
     password_entryL = tk.Entry(login_frame, fg='#B3B6B7')
     password_entryL.place(relx=0.1, relwidth= 0.8, rely = 0.72, relheight=0.1 )
     password_entryL.insert(0, 'password')
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> 754fb182af530d6d5e61658d06c4833bf1efc415
 
     signUp = tk.Button(login_frame, text = "Sign up", bg="#D6DBDF", font =("Courier", 8), command = lambda: create_frame("signup"))
     signUp.place(relx = 0.7, rely = 0.85, relheight= 0.03, relwidth = 0.2)
@@ -88,27 +77,6 @@ def initialize_login():
 
 # Signup frame
 def initialize_signup():
-
-   def emptyIfPlace1(ent,place):
-      if ent.get()=="":
-            ent.insert(0,place)
-            return
-      else:
-         ent.delete("0","end")
-
-   def emptyIfPlace2(ent,place):
-      if ent.get()=="":
-            ent.insert(0,place)
-            return
-      else:
-         ent.delete("0","end")
-   
-   def emptyIfPlace3(ent,place):
-      if ent.get()=="":
-            ent.insert(0,place)
-            return
-      else:
-         ent.delete("0","end")
 
 
    def create_user():
@@ -128,7 +96,11 @@ def initialize_signup():
    username_entryS = tk.Entry(signup_frame, fg='#B3B6B7')
    username_entryS.insert(0, 'username')
    username_entryS.place(relx=0.1, relwidth= 0.8, rely = 0.25, relheight=0.1 )
+<<<<<<< HEAD
+
+=======
    
+>>>>>>> 754fb182af530d6d5e61658d06c4833bf1efc415
    password_entryS = tk.Entry(signup_frame, fg='#B3B6B7')
    password_entryS.insert(0, 'password')
    password_entryS.place(relx=0.1, relwidth= 0.8, rely = 0.45, relheight=0.1 )
@@ -136,11 +108,14 @@ def initialize_signup():
    password_entryS1 = tk.Entry(signup_frame, fg='#B3B6B7')
    password_entryS1.insert(0, 'confirm password')
    password_entryS1.place(relx=0.1, relwidth= 0.8, rely = 0.65, relheight=0.1 )
+<<<<<<< HEAD
+=======
 
 
 
 
 
+>>>>>>> 754fb182af530d6d5e61658d06c4833bf1efc415
 
 
    createAcc = tk.Button(signup_frame, text = "Create account", bg="#D6DBDF", font =("Courier", 8), command=create_user)
@@ -241,7 +216,10 @@ def initialize_home(user):
    username.config(font =("Courier", 11))
    username.place(relx = 0, rely = 0.4, relheight= 0.1)
 
+<<<<<<< HEAD
+=======
    
+>>>>>>> 754fb182af530d6d5e61658d06c4833bf1efc415
    balance = tk.Label(frame1H, text=("Balance:"+str(user.balance)), bg = "#AEB6BF", font =("Courier", 11))
    balance.place(relx = 0.03, rely = 0.6, relheight= 0.1)
 
