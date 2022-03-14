@@ -1,11 +1,10 @@
-
 import tkinter as tk
 from PIL import Image, ImageTk
 from Database import CreateUser, checkIfUserExists, login
 from UtilityClasses import TaaCoin, User
 from blockchain import Transaction
 from components import makeTransactionPage, mineTransactions
-
+import mysql.connector as c
 
 root = tk.Tk()
 
@@ -16,6 +15,15 @@ background_image = ImageTk.PhotoImage(Image.open("assets/landscape.png").resize(
 frames = {}
 framesDim = {}
 
+db= c.connect(host="localhost", database="bid", user="root", passwd="Development16")
+mc=db.cursor()
+try:
+    mc.execute("create table user(id int primary key AUTO_INCREMENT,name varchar(15),password varchar(255))")
+    db.commit()
+except:
+    print("table already created")
+
+
 def create_frame(fType):
    frame = frames[fType]
    dim = framesDim[fType]
@@ -25,8 +33,8 @@ def create_frame(fType):
 def initialize_login():
     def create_home():
          username, password = username_entryL.get(), password_entryL.get()
-         if(checkIfUserExists(username)):
-            if(login(username,password)):
+         if(checkIfUserExists(username, mc)):
+            if(login(username,password, mc)):
                user= User(username)
                initialize_home(user)
                login_frame.place_forget()
@@ -35,8 +43,8 @@ def initialize_login():
                create_frame("H-frame-3")
          else:
             print("creating new user")
-            CreateUser(username,password)
-            if(login(username,password)):
+            CreateUser(username,password, mc)
+            if(login(username,password, mc)):
                user= User(username)
                initialize_home(user)
                login_frame.place_forget()
