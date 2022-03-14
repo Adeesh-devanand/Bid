@@ -15,8 +15,11 @@ background_image = ImageTk.PhotoImage(Image.open("assets/landscape.png").resize(
 frames = {}
 framesDim = {}
 
-db= c.connect(host="localhost", database="bid", user="root", passwd="Development16")
+db= c.connect(host="localhost", user="root", passwd="password")
 mc=db.cursor()
+mc.execute("create database if not exists bid")
+mc .execute("use bid")
+
 try:
     mc.execute("create table user(id int primary key AUTO_INCREMENT,name varchar(15),password varchar(255))")
     db.commit()
@@ -31,26 +34,33 @@ def create_frame(fType):
 
 # Login frame
 def initialize_login():
+    def emptyIfPlace1(ent,place):
+         if ent.get()=="":
+            ent.insert(0,place)
+            return
+         else:
+            ent.delete("0","end")
+   
+    def emptyIfPlace2(ent,place):
+         if ent.get()=="":
+            ent.insert(0,place)
+            return
+         else:
+            ent.delete("0","end")
+   
+    
     def create_home():
          username, password = username_entryL.get(), password_entryL.get()
          if(checkIfUserExists(username, mc)):
             if(login(username,password, mc)):
                user= User(username)
                initialize_home(user)
-               login_frame.place_forget()
+               login_frame.a_forget()
                create_frame("H-frame-1")
                create_frame("H-frame-2")
                create_frame("H-frame-3")
          else:
-            print("creating new user")
-            CreateUser(username,password, mc)
-            if(login(username,password, mc)):
-               user= User(username)
-               initialize_home(user)
-               login_frame.place_forget()
-               create_frame("H-frame-1")
-               create_frame("H-frame-2")
-               create_frame("H-frame-3")
+            create_frame("invalid-User")
 
         
     login_frame = tk.Frame(root)
@@ -61,12 +71,18 @@ def initialize_login():
     usericon_labelL.place(relx = 0.35, rely = 0.15, relheight= 0.3, relwidth = 0.3)
 
     username_entryL = tk.Entry(login_frame, fg='#B3B6B7')
-    username_entryL.insert(0, 'username')
     username_entryL.place(relx=0.1, relwidth= 0.8, rely = 0.57, relheight=0.1 )
+    username_entryL.insert(0, 'username')
+   #  username_entryL.bind("<FocusIn>",lambda args:emptyIfPlace2(username_entryL,"username"))
+   #  username_entryL.bind("<FocusOut>",lambda args:emptyIfPlace2(username_entryL,"username"))
 
     password_entryL = tk.Entry(login_frame, fg='#B3B6B7')
-    password_entryL.insert(0, 'password')
     password_entryL.place(relx=0.1, relwidth= 0.8, rely = 0.72, relheight=0.1 )
+    password_entryL.insert(0, 'password')
+   #  password_entryL.bind("<FocusIn>", lambda args:emptyIfPlace1(password_entryL,"password"))
+   #  password_entryL.bind("<FocusOut>",lambda args:emptyIfPlace2(password_entryL,"password"))
+
+
 
     signUp = tk.Button(login_frame, text = "Sign up", bg="#D6DBDF", font =("Courier", 8), command = lambda: create_frame("signup"))
     signUp.place(relx = 0.7, rely = 0.85, relheight= 0.03, relwidth = 0.2)
@@ -77,9 +93,37 @@ def initialize_login():
 # Signup frame
 def initialize_signup():
 
+   def emptyIfPlace1(ent,place):
+      if ent.get()=="":
+            ent.insert(0,place)
+            return
+      else:
+         ent.delete("0","end")
+
+   def emptyIfPlace2(ent,place):
+      if ent.get()=="":
+            ent.insert(0,place)
+            return
+      else:
+         ent.delete("0","end")
+   
+   def emptyIfPlace3(ent,place):
+      if ent.get()=="":
+            ent.insert(0,place)
+            return
+      else:
+         ent.delete("0","end")
+
+
    def create_user():
-      username, password = username_entryS.get(), password_entryS.get()
-      create_frame("Created-User")
+      username, password, confirm_password = username_entryS.get(), password_entryS.get(), password_entryS1.get()
+      if password == confirm_password:   
+         CreateUser(username,password, mc)
+         if(login(username,password, mc)):
+            User(username)
+         create_frame("Created-User")
+      else:
+         create_frame("nonMatching-pass")
 
    signup_frame = tk.Frame(root)
    frames["signup"] = signup_frame
@@ -88,14 +132,26 @@ def initialize_signup():
    username_entryS = tk.Entry(signup_frame, fg='#B3B6B7')
    username_entryS.insert(0, 'username')
    username_entryS.place(relx=0.1, relwidth= 0.8, rely = 0.25, relheight=0.1 )
+   # username_entryS.bind("<FocusOut>",lambda args:emptyIfPlace3(username_entryS,"username"))
+   # username_entryS.bind("<FocusIn>",lambda args:emptyIfPlace3(username_entryS,"username"))
 
    password_entryS = tk.Entry(signup_frame, fg='#B3B6B7')
    password_entryS.insert(0, 'password')
    password_entryS.place(relx=0.1, relwidth= 0.8, rely = 0.45, relheight=0.1 )
+   # password_entryS.bind("<FocusIn>", lambda args:emptyIfPlace1(password_entryS,"password"))
+   # password_entryS.bind("<FocusOut>", lambda args:emptyIfPlace1(password_entryS,"password"))
 
    password_entryS1 = tk.Entry(signup_frame, fg='#B3B6B7')
    password_entryS1.insert(0, 'confirm password')
    password_entryS1.place(relx=0.1, relwidth= 0.8, rely = 0.65, relheight=0.1 )
+   # password_entryS1.bind("<FocusOut>", lambda args:emptyIfPlace2(password_entryS1,"confirm password"))
+   # password_entryS1.bind("<FocusIn>", lambda args:emptyIfPlace2(password_entryS1,"confirm password"))
+
+
+
+
+
+
 
    createAcc = tk.Button(signup_frame, text = "Create account", bg="#D6DBDF", font =("Courier", 8), command=create_user)
    createAcc.place(relx = 0.3, rely = 0.88, relheight= 0.06, relwidth = 0.4)
@@ -117,6 +173,57 @@ def initialize_createdU():
    ok.place(relx = 0.25, rely = 0.43, relheight= 0.33, relwidth = 0.5)
 
    Success = tk.Label(frame1, text="  Created Account Successfully!")
+   Success.config(font =("Courier", 11))
+   Success.place(relx = 0.05, rely = 0.2, relheight= 0.15, relwidth = 0.9)
+
+# Invalid-User frame
+def initialize_invalidU():
+
+   invalidU_frame = tk.Frame(root, bg="#315a6e")
+   frames["invalid-User"] = invalidU_frame
+   framesDim["invalid-User"] = (0.3, 0.4, 0.2, 0.4)
+
+   frame1 = tk.Frame(invalidU_frame)
+   frame1.place(relx=0.025, rely=0.05, relheight=0.9, relwidth=0.95)
+
+   ok = tk.Button(frame1, text = "OK", bg="#CB4335", font =("Courier", 8), command=invalidU_frame.place_forget)
+   ok.place(relx = 0.25, rely = 0.43, relheight= 0.33, relwidth = 0.5)
+
+   Success = tk.Label(frame1, text="Invalid Account")
+   Success.config(font =("Courier", 11))
+   Success.place(relx = 0.05, rely = 0.2, relheight= 0.15, relwidth = 0.9)
+
+# Invalid-passsword frame
+def initialize_invalidP():
+
+   invalidP_frame = tk.Frame(root, bg="#315a6e")
+   frames["invalid-passwod"] = invalidP_frame
+   framesDim["invalid-password"] = (0.3, 0.4, 0.2, 0.4)
+
+   frame1 = tk.Frame(invalidP_frame)
+   frame1.place(relx=0.025, rely=0.05, relheight=0.9, relwidth=0.95)
+
+   ok = tk.Button(frame1, text = "OK", bg="#CB4335", font =("Courier", 8), command=invalidP_frame.place_forget)
+   ok.place(relx = 0.25, rely = 0.43, relheight= 0.33, relwidth = 0.5)
+
+   Success = tk.Label(frame1, text="Invalid Password")
+   Success.config(font =("Courier", 11))
+   Success.place(relx = 0.05, rely = 0.2, relheight= 0.15, relwidth = 0.9)
+
+# nonMatching-pass frame
+def initialize_nonMatching_pass():
+
+   nonMatching_pass_frame = tk.Frame(root, bg="#315a6e")
+   frames["nonMatching-pass"] = nonMatching_pass_frame
+   framesDim["nonMatching-pass"] = (0.3, 0.4, 0.2, 0.4)
+
+   frame1 = tk.Frame(nonMatching_pass_frame)
+   frame1.place(relx=0.025, rely=0.05, relheight=0.9, relwidth=0.95)
+
+   ok = tk.Button(frame1, text = "OK", bg="#CB4335", font =("Courier", 8), command=nonMatching_pass_frame.place_forget)
+   ok.place(relx = 0.25, rely = 0.43, relheight= 0.33, relwidth = 0.5)
+
+   Success = tk.Label(frame1, text="Passwords don't match")
    Success.config(font =("Courier", 11))
    Success.place(relx = 0.05, rely = 0.2, relheight= 0.15, relwidth = 0.9)
    
@@ -215,6 +322,9 @@ def main():
     initialize_login()
     initialize_signup()
     initialize_createdU()
+    initialize_invalidU()
+    initialize_invalidP()
+    initialize_nonMatching_pass()
     create_frame("login")
 
     root.mainloop()
