@@ -1,7 +1,6 @@
 def checkIfUserExists(username, mc):
     mc.execute("SELECT * FROM user WHERE name = \"{}\"".format(username))
     query = mc.fetchall()
-    print(query)
     if(len(query)==0):
         return False
     return True

@@ -82,7 +82,7 @@ class BlockChain:
     
     def createTransaction(self,transaction):
         if(transaction.amount>self.getBalanceof(transaction.senderAddress) and transaction.senderAddress!="Genesis"):
-            print("you a broke piece of shit")
+            print("not enough balance")
             return False
         self.peningTransactions.append(transaction)
         return True
