@@ -1,9 +1,13 @@
+# database.py
+
 import mysql.connector as c
+from UtilityClasses import TaaCoin
+from blockchain import Transaction
 
 class  Database:
     def __init__(self):
 
-        self.db= db= c.connect(host="localhost", user="root", passwd="Development16")
+        self.db= db= c.connect(host="localhost", user="root", passwd="password")
         self.mc= mc=db.cursor()
         
         self.mc.execute("create database if not exists bid")
@@ -30,6 +34,8 @@ class  Database:
             query = self.mc.fetchall()
             self.mc.execute("INSERT INTO user values({},\"{}\",\"{}\")".format(len(query)+1,username,password))
             self.db.commit()
+            TaaCoin.createTransaction(Transaction("Genesis",username,1000))
+
     def login(self, username, password):
         if(self.checkIfUserExists(username)):
             self.mc.execute("SELECT * FROM user")

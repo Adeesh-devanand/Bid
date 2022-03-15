@@ -1,3 +1,5 @@
+# blockchain.py
+
 # import the libraries required for cryptography
 import hashlib
 
@@ -9,9 +11,9 @@ import datetime
 # Lets define a Transaction
 
 class Transaction:
-    def __init__(self, senderAdderess, recAddress, amount):
+    def __init__(self, senderAddress, recAddress, amount):
         self.time = datetime.datetime.now()
-        self.senderAddress = senderAdderess
+        self.senderAddress = senderAddress
         self.recAddress = recAddress
         self.amount = amount
 
@@ -50,7 +52,7 @@ class BlockChain:
       
     
 
-    # the first block of the blockchain should be added mannualy
+    # the first block of the blockchain should be added manually
     def createGenesis(self):
         return Block([Transaction("Genesis", "Genesis",21000000000)], "Genesis")
 
@@ -59,12 +61,12 @@ class BlockChain:
     def getLatestBlock(self):
         return self.chain[-1]  
 
-    # Mining pending transactions and add the block!
-    def minePendingTransactions(self, reciverAddress):
+    # Mining pending transactions and adding the block!
+    def minePendingTransactions(self, receiverAddress):
         newBlock = Block( self.peningTransactions, self.getLatestBlock().blockHash)
         newBlock.mineBlock()
         self.chain.append(newBlock)
-        self.peningTransactions = [Transaction("Genesis",reciverAddress,self.miningReward)]
+        self.peningTransactions = [Transaction("Genesis",receiverAddress,self.miningReward)]
     
     # verifying the blockchain
     def isValid(self):
@@ -107,8 +109,7 @@ class BlockChain:
                 
         return a
     def checkIfUserHasPendingTransanctions(self,user):
-        for transanction in self.peningTransactions:
-            if(transanction.senderAddress== user):
+        for transaction in self.peningTransactions:
+            if(transaction.senderAddress== user):
                 return True
         return False
-

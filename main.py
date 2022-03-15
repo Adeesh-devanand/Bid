@@ -1,12 +1,14 @@
+# main.py
+
 import tkinter as tk
 from PIL import Image, ImageTk
-from Database import  Database
+from database import  Database
 from UtilityClasses import TaaCoin, User
 from blockchain import Transaction
 from components import makeTransactionPage, mineTransactions
-import mysql.connector as c
 
 root = tk.Tk()
+root.title("TAA Coin")
 
 usericon_imageH = ImageTk.PhotoImage(Image.open("assets/User-Icon-White.png").resize((100, 100)))
 usericon_imageL = ImageTk.PhotoImage(Image.open("assets/User-Icon-White.png").resize((100, 100)))
@@ -215,7 +217,7 @@ def initialize_home(user):
    make_transactionB = tk.Button(frame2, text = "Make Transaction", bg= "#D6DBDF", font =("Courier", 11), command=make_transaction)
    make_transactionB.place(relx = 0.1, rely = 0.05, relheight= 0.4, relwidth = 0.8)
 
-   mine_transactionsB = tk.Button(frame2, text = "Mine Dk Coins", bg= "#D6DBDF", font =("Courier", 11), command=mine_transactions)
+   mine_transactionsB = tk.Button(frame2, text = "Mine TAA Coins", bg= "#D6DBDF", font =("Courier", 11), command=mine_transactions)
    mine_transactionsB.place(relx = 0.1, rely = 0.55, relheight= 0.4, relwidth = 0.8)
 
    # frame 3
@@ -251,6 +253,7 @@ def main():
     TaaCoin.createTransaction(Transaction("Genesis","chandan",1000))
     TaaCoin.createTransaction(Transaction("Genesis","adeesh",1000))
     TaaCoin.createTransaction(Transaction("Genesis","Elon",1000))
+    
     canvas = tk.Canvas(root, height=700, width=800)
     canvas.pack()
 

@@ -1,3 +1,5 @@
+# components.py
+
 import tkinter as tk
 
 from UtilityClasses import TaaCoin
@@ -19,7 +21,7 @@ def makeTransactionPage(root, user):
 
     tk.Label(frame1,text=("Sender address: "+ user.id)).pack()
     if(TaaCoin.checkIfUserHasPendingTransanctions(user.id)):
-        tk.Label(frame1,text="please wait until your pending transanctions are processed").pack() 
+        tk.Label(frame1,text="please wait until your pending transactions are processed").pack() 
  
     else:
         inp= tk.Entry(frame1, width=50, borderwidth=3)
@@ -44,14 +46,14 @@ def mineTransactions(root, user, updateComponent):
 
     tk.Label(frame1,text="We love you for maintaining the network!!").pack()
     if(len(TaaCoin.peningTransactions)<3):
-        tk.Label(frame1, text= "please wait till pending transanction count reaches to 3+").pack()
-        tk.Label(frame1, text="current pending transanctions: "+ str(len(TaaCoin.peningTransactions))).pack()
+        tk.Label(frame1, text= "please wait till pending transaction count reaches to 3+").pack()
+        tk.Label(frame1, text="current pending transactions: "+ str(len(TaaCoin.peningTransactions))).pack()
     else:
         tk.Label(frame1,text="mining!!").pack()
         TaaCoin.minePendingTransactions(user.id)
         tk.Label(frame1,text="done mining!!").pack()
         user.balance = TaaCoin.getBalanceof(user.id)
-        tk.Label(frame1,text=("as a token of appreciation we added"+str(TaaCoin.miningReward)+"to your account")).pack()
+        tk.Label(frame1,text=("as a token of appreciation we added "+str(TaaCoin.miningReward)+" to your account")).pack()
         print(user.balance)
         updateComponent.config(text=("Balance:"+str(user.balance)))
 
