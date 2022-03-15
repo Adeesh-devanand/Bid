@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from Database import CreateUser, checkIfUserExists, login
+from Database import  Database
 from UtilityClasses import TaaCoin, User
 from blockchain import Transaction
 from components import makeTransactionPage, mineTransactions
@@ -14,17 +14,7 @@ background_image = ImageTk.PhotoImage(Image.open("assets/landscape.png").resize(
 
 frames = {}
 framesDim = {}
-
-db= c.connect(host="localhost", user="root", passwd="Development16")
-mc=db.cursor()
-mc.execute("create database if not exists bid")
-mc .execute("use bid")
-
-try:
-    mc.execute("create table user(id int primary key AUTO_INCREMENT,name varchar(15),password varchar(255))")
-    db.commit()
-except:
-    print("table already created")
+database = Database()
 
 
 def create_frame(fType):
@@ -37,8 +27,8 @@ def initialize_login():
 
     def create_home():
          username, password = username_entryL.get(), password_entryL.get()
-         if(checkIfUserExists(username, mc)):
-            if(login(username,password, mc)):
+         if(database.checkIfUserExists(username)):
+            if(database.login(username,password)):
                user= User(username)
                initialize_home(user)
                login_frame.place_forget()
@@ -79,8 +69,9 @@ def initialize_signup():
    def create_user():
       username, password, confirm_password = username_entryS.get(), password_entryS.get(), password_entryS1.get()
       if password == confirm_password:   
-         CreateUser(username,password, mc)
-         if(login(username,password, mc)):
+         database.CreateUser(username,password)
+         print()
+         if(database.login(username,password)):
             User(username)
          create_frame("Created-User")
       else:
