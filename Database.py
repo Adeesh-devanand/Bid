@@ -1,5 +1,6 @@
 # database.py
 
+from asyncio import QueueEmpty
 import mysql.connector as c
 from UtilityClasses import TaaCoin
 from blockchain import Transaction
@@ -7,7 +8,7 @@ from blockchain import Transaction
 class  Database:
     def __init__(self):
 
-        self.db= db= c.connect(host="localhost", user="root", passwd="password")
+        self.db= db= c.connect(host="localhost", user="root", passwd="Development16")
         self.mc= mc=db.cursor()
         
         self.mc.execute("create database if not exists bid")
@@ -38,8 +39,6 @@ class  Database:
 
     def login(self, username, password):
         if(self.checkIfUserExists(username)):
-            self.mc.execute("SELECT * FROM user")
-            query = self.mc.fetchall()
             self.mc.execute("select password from user where name = \"{}\"".format(username))
             query = self.mc.fetchall()[0][0]
             if(query== password):
