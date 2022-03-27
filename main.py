@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from PIL import Image, ImageTk
-from database import  Database
+from Database import  Database
 from UtilityClasses import TaaCoin, User
 from blockchain import Transaction
 from components import makeTransactionPage, mineTransactions
